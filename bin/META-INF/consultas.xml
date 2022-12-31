@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="2.2"
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm http://xmlns.jcp.org/xml/ns/persistence/orm_2_2.xsd">
+
+	<named-query name="obterFilmesComNotaMaiorQue">
+		<query>
+			SELECT DISTINCT f FROM Filme f
+			JOIN FETCH f.atores
+			WHERE f.nota > :nota
+		</query>
+	</named-query>
+
+	<named-query name="nomeDosAlunos">
+		<query>
+			SELECT a FROM Aluno a
+			WHERE a.nome = :nome OR a.matricula = :matricula 
+		</query>
+	</named-query>
+
+	<named-native-query name="obeterMediaGeralDosFilmes" result-set-mapping="NotaFilmeMap">
+		<query>
+			SELECT AVG(nota) AS media FROM filmes
+		</query>
+	</named-native-query>
+	
+	<named-native-query name="obeterAlunos" result-set-mapping="AlunosMap">
+		<query>
+			SELECT * FROM alunos
+		</query>
+	</named-native-query>
+	
+	<sql-result-set-mapping name="NotaFilmeMap">
+		<constructor-result target-class="modelo.consulta.NotaFilme">
+			<column name="media" class="java.lang.Double" />
+		</constructor-result>	
+	</sql-result-set-mapping>
+	
+	<sql-result-set-mapping name="AlunosMap">
+		<constructor-result target-class="modelo.heranca.Aluno">
+			<column name="media" class="java.lang.String" />
+		</constructor-result>	
+	</sql-result-set-mapping>
+
+</entity-mappings>
